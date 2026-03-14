@@ -1,0 +1,24 @@
+# Build directories
+build/
+boost-iosx/
+openssl-*/
+
+# Downloaded archives
+*.tar.gz
+*.zip
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Xcode
+*.xcworkspace
+*.xcodeproj
+xcuserdata/
+DerivedData/
+
+# Temporary files
+*.swp
+*.swo
+*~
