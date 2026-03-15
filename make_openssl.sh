@@ -40,13 +40,15 @@ do
     # Configure OpenSSL
     export CROSS_TOP="${SDK_PATH%/SDKs/*}"
     export CROSS_SDK="${SDK_PATH##*/SDKs/}"
-    export CC="xcrun -sdk $(echo $platform | tr '[:upper:]' '[:lower:]') clang"
 
-    # For x86_64 simulator, we need to use the correct target
-    if [ "$arch" = "x86_64" ]; then
-        ./Configure iossimulator-xcrun no-shared no-async -mios-simulator-version-min=${IOS_DEPLOYMENT_TARGET} --prefix=${SCRIPTPATH}/build/${platform}/${arch}
-    else
+    # Set CC with explicit architecture flag
+    if [ "$platform" = "iPhoneOS" ]; then
+        export CC="xcrun -sdk iphoneos clang -arch ${arch}"
         ./Configure ${configure_target} no-shared no-async -mios-version-min=${IOS_DEPLOYMENT_TARGET} --prefix=${SCRIPTPATH}/build/${platform}/${arch}
+    else
+        # Simulator builds need explicit architecture
+        export CC="xcrun -sdk iphonesimulator clang -arch ${arch}"
+        ./Configure iossimulator-xcrun no-shared no-async -mios-simulator-version-min=${IOS_DEPLOYMENT_TARGET} --prefix=${SCRIPTPATH}/build/${platform}/${arch}
     fi
 
     make clean || true
